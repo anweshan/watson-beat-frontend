@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Web Demo of Watson Beat</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style> html { font-size: 12px; } </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Web Demo of Watson Beat</h1>
+      <form action="{{ url_for('submit') }}" method="post">
+        <div class="form-group">
+          <label for="param1">param1</label>
+          <input type="text" class="form-control" id="rule-name"
+                 aria-described-by="param1-help"
+                 name="param1">
+          </input>
+          <small id="param1-help" class="form-text text-muted">
+            Instructions for param1
+          </small>
+        </div>
+        <div class="form-group">
+          <label for="param2">param1</label>
+          <input type="text" class="form-control" id="rule-name"
+                 aria-described-by="param2-help"
+                 name="param2">
+          </input>
+          <small id="param2-help" class="form-text text-muted">
+            Instructions for param2
+          </small>
+        </div>
+        <div class="button">
+          <input type="submit">
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
