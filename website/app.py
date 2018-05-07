@@ -8,6 +8,5 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    print request.form.keys()
-    return ', '.join('{}: {}'.format(key, val)
-                     for key, val in request.form.iteritems())
+    return ''.join('<p>{}: {}</p>'.format(key, val)
+                   for key, val in sorted(request.form.iteritems()))
