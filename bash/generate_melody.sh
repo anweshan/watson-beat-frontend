@@ -2,7 +2,12 @@
 
 
 # Defines the home of Watson Beat. Need to have a way of setting this
-WB_HOME="../../watson-beat"
+if [ ! -f WBHOME ]; then
+    echo "Setting up Watson Beat repo"
+    ./init.sh
+fi
+
+WB_HOME=$(cat WBHOME)
 
 # Parse passed parameters
 while getopts ":i:m:o:" opt; do
