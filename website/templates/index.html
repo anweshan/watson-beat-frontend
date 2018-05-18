@@ -13,7 +13,9 @@
       <p>Input paramaters below to create a composition with Watson Beat. A composition is a sequence of movements. A movement is a sequence of sections.</p>
 
       <div id="app">
-        <form action="{{ url_for('submit') }}" method="post">
+        <form action="{{ url_for('submit') }}"
+              method="POST"
+              enctype="multipart/form-data">
           <composition></composition>
           <p><button type="submit">Submit</button></p>
         </form>

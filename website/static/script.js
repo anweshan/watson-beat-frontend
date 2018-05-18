@@ -2,6 +2,8 @@
 MOODS = ["EDM", "Space", "anthematic", "bommarch", "chill", "inspire",
          "popfunk", "propulsion", "reggaepop"];
 COMPLEXITIES = ["simple", "super_simple", "semi_complex"];
+MIDIS = ["Custom", "entertainer.mid","greensleeves.mid","happy1.mid","hungarian_dance_no5.mid","jingle1.mid","mary.mid","new_mel.mid","new_mel2.mid","new_world_symphony2.mid","new_world_symphony_largo.mid","ode_to_joy.mid","polish_melody.mid"];
+INIS = ["Custom", "Anthematic.ini","BomMarch.ini","Chill.ini","EDM.ini","Inspire.ini","MoodChange.ini","PopFunk.ini","Propulsion.ini","ReggaePop.ini","ReggaePopSeconds.ini","ReggaePop_Time_Space.ini","Space.ini","changeMoods.ini","moods.ini","moods1.ini","moods2.ini","moods3.ini","moods4.ini"];
 
 
 // Component for a text input
@@ -39,9 +41,31 @@ Vue.component('select-input', {
   </label>
   <select :id="id" class="form-control"
           :aria-described-by="id+ '-help'"
-          :name="id">
+          :name="id"
+          @change="$emit('change')">
     <option v-for="opt in options">{{ opt }}</option>
   </select>
+</div>
+`
+});
+
+// Component for a file input
+Vue.component('file-input', {
+  props: ['name', 'id', 'help'],
+  template: `
+<div class="form-group mx-1">
+  <label :for="id">
+    {{name}}
+    <a href="#" :title="help">
+      ?
+    </a>
+  </label>
+  <input type="file" class="form-control" accept=".mid, .midi"
+         :aria-described-by="id + '-help'"
+         :id="id"
+         :name="id"
+         :value="value">
+  </input>
 </div>
 `
 });
@@ -164,22 +188,97 @@ Vue.component('movement', {
   }
 });
 
-
-Vue.component('composition', {
+Vue.component('midi-selector', {
   data: function() {
     return {
-      numMovements: 1
-    };
+      isCustom: true 
+    }
   },
   template: `
 <section class="border p-2 mb-2">
-  <movement
-    v-for="i in numMovements"
-    :key="i - 1"
-    :movementId="i - 1">
-  </movement>
-  <button @click.stop.prevent="numMovements += 1">Add a movement</button>
+  <h2>Input melody</h2>
+  <p>
+    Pick a 10-20 second midi file to inspire Watson Beat or upload your own
+  </p>
+  <select-input
+    name="Select a .midi file"
+    id="input-midi"
+    help="Pick 'Custom' to upload your own .midi file or select one of the defaults"
+    :options="getMidis()"
+    @change="checkCustom()">
+  </select-input>
+  <file-input
+    name="Upload a .midi file"
+    id="input-midi-file"
+    help="Upload a midi file"
+    v-if="isCustom"></file-input>
 </section>
+`,
+  methods: {
+    getMidis: function() {
+      return MIDIS;
+    },
+    checkCustom: function() {
+      selector = document.getElementById('input-midi');
+      this.isCustom = selector && selector.value == "Custom";
+    }
+  }
+});
+
+
+Vue.component('ini-selector', {
+  data: function() {
+    return {
+      isCustom: true,
+      numMovements: 1
+    }
+  },
+  template: `
+<section class="border p-2 mb-2">
+  <h2>Parameters for the creativity engine</h2>
+  <p>
+    Input parameters for the creativity engine for each movement and section, or pick one of the default configurations.
+  </p>
+  <select-input
+    name="Pick parameters"
+    id="input-ini"
+    help="Choose 'Custom' to pick your own parameters for the creativity engine or select one of the default configurations"
+    :options="getInis()"
+    @change="checkCustom()">
+  </select-input>
+  <div v-if="isCustom">
+    <movement\
+      v-for="i in numMovements"\
+      :key="i - 1"\
+      :movementId="i - 1">\
+    </movement>\
+    <button @click.stop.prevent="numMovements += 1">Add a movement</button>\
+  </div>
+</section>
+`,
+  methods: {
+    getInis: function() {
+      return INIS;
+    },
+    checkCustom: function() {
+      selector = document.getElementById('input-ini');
+      this.isCustom = selector && selector.value == "Custom";
+      // No way to preserve the custom parameters right now so just
+      // reset to the initial configuration
+      if (!this.isCustom) {
+        this.numMovements = 1;
+      }
+    }
+  }
+});
+
+
+Vue.component('composition', {
+  template: `
+<div>
+  <midi-selector></midi-selector>
+  <ini-selector></ini-selector>
+</div>
 `
 });
 
