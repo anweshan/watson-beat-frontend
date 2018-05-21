@@ -5,6 +5,7 @@ from flask import Flask, request, render_template, url_for
 
 from util import ini
 
+wb_home="../watson-beat/src"
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
@@ -52,6 +53,19 @@ def convert_midi_to_wav(midi_fn, wav_fn):
         output = subprocess.check_output(command) 
     except Exception as e:
         print "Couldn't convert midi, {}".format(e)
+        raise e
+
+
+def generate_midi(input_midi_fn="Midi/mary.mid", input_ini_fn="Ini/Space.ini", output_midi_fn="./output/"):
+    print input_ini_fn, input_midi_fn, output_midi_fn
+    command = "./generate_melody.sh -m " + input_midi_fn + " -i " + input_ini_fn + " -o " + output_midi_fn
+    print command
+    # command = ["./generate_melody.sh"]
+    try:
+        print subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
+        # output = subprocess.check_output(command)
+    except Exception as e:
+        print "Couldn't generate midi, {}".format(e)
         raise e
 
 
