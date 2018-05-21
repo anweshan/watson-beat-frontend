@@ -56,13 +56,16 @@ def convert_midi_to_wav(midi_fn, wav_fn):
         raise e
 
 
-def generate_midi(input_midi_fn="Midi/mary.mid", input_ini_fn="Ini/Space.ini", output_midi_fn="./output/"):
+def generate_midi(input_midi_fn="Midi/mary.mid", input_ini_fn="Ini/Space.ini", output_midi_fn="./output/", single_midi_fn="output.mid"):
     print input_ini_fn, input_midi_fn, output_midi_fn
-    command = "./generate_melody.sh -m " + input_midi_fn + " -i " + input_ini_fn + " -o " + output_midi_fn
-    print command
+    generate_midi_files_command = "./generate_melody.sh -m " + input_midi_fn + " -i " + input_ini_fn + " -o " + output_midi_fn
+    print generate_midi_files_command
+
+    combine_midi_files_command = "./combine_midi.sh " + output_midi_fn + " " + single_midi_fn
     # command = ["./generate_melody.sh"]
     try:
-        print subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
+        print subprocess.Popen(generate_midi_files_command, shell=True, stdout=subprocess.PIPE).stdout.read()
+        print subprocess.Popen(combine_midi_files_command, shell=True, stdout=subprocess.PIPE).stdout.read()
         # output = subprocess.check_output(command)
     except Exception as e:
         print "Couldn't generate midi, {}".format(e)
