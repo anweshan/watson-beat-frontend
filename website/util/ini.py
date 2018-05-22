@@ -25,26 +25,30 @@ def get_param_dict(params):
 
 
 def add_movement_params(movement, movement_id, lines):
-    lines.append("# Movement settings")
+    lines.append("movement settings")
     lines.append("movementId: {}".format(movement_id))
-    for key in movement:
-        if key != "sections":
-            lines.append("{}: {}".format(key, movement[key]))
+    lines.append("movementDuration: {}".format(movement["movementDuration"]))
+    lines.append("")
+    lines.append("#WB Levers")
+    movement["rhythmSpeed"] = "medium"
+    for key in ["mood", "rhythmSpeed", "complexity"]:
+        lines.append("{}: {}".format(key, movement[key]))
     lines.append("")
 
    
 def get_section_line(section, section_id):
-    line = ["section:  id: {}".format(section_id)]
-    for key in sorted(section.keys()):
+    line = ["section:  id:{}".format(section_id)]
+    for key in ["tse", "bpm", "energy", "durationInMeasures",
+                "slope", "direction"]:
         if key in NUMBER_FIELDS:
-            line.append("{}: {}".format(key, section[key]))
+            line.append("{}:{}".format(key, section[key]))
         else:
-            line.append("{}: '{}'".format(key, section[key]))
+            line.append("{}:'{}'".format(key, section[key]))
     return ', '.join(line)
 
 
 def add_section_params(movement, lines):
-    lines.append("# Section settings")
+    lines.append("#section settings")
     for i in xrange(len(movement['sections'])):
         line = get_section_line(movement['sections'][str(i)], i)
         lines.append(line)
@@ -55,12 +59,13 @@ def get_ini(params):
     d = get_param_dict(params)
     num_movements = len(d)
     lines = [
-        "# Composition settings",
+        "#composition settings",
         "numMovements: {}".format(num_movements),
         ""
     ]
     for i in xrange(num_movements):
         add_movement_params(d[str(i)], i, lines)
         add_section_params(d[str(i)], lines)
+        lines.append("#end movement")
     return '\n'.join(lines)  
 

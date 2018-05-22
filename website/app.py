@@ -51,8 +51,8 @@ def submit():
                   single_midi_fn="output.mid")
 
     single_midi_fn = "output.mid"
-    #wav_name = "tmp-{}.wav".format(random_string(6)) # avoid caching
-    wav_name = "tmp.wav"
+    wav_name = "tmp-{}.wav".format(random_string(6)) # avoid caching
+    #wav_name = "tmp.wav"
     output_wav_fn = get_app_dir() + "/static/" + wav_name
     convert_midi_to_wav(single_midi_fn, output_wav_fn)
 
