@@ -60,4 +60,4 @@ echo "Changing directories. Currently in `pwd`"
 
 # Generate the melody using the parameters
 echo "Generating the melody..."
-python wbDev.py -i $INIFILE -m $MIDIFILE -o $OUTPUTPATH
+python wbDev.py -i $INIFILE -m $MIDIFILE -o $OUTPUTPATH 

@@ -1,9 +1,14 @@
 # Functions to write an ini file given paramters
 from collections import defaultdict
 
+# Have to write numbers instead of strings for some values
+NUMBER_FIELDS = ["bpm"]
+
 def get_param_dict(params):
     d = defaultdict(dict)
     for key, val in params.iteritems():
+        if key.startswith('input-'):
+            continue
         parts = key.split('-')
         if len(parts) == 3: # movement-level param
             _, movement_num, param_name = parts
@@ -31,7 +36,10 @@ def add_movement_params(movement, movement_id, lines):
 def get_section_line(section, section_id):
     line = ["section:  id: {}".format(section_id)]
     for key in sorted(section.keys()):
-        line.append("{}: '{}'".format(key, section[key]))
+        if key in NUMBER_FIELDS:
+            line.append("{}: {}".format(key, section[key]))
+        else:
+            line.append("{}: '{}'".format(key, section[key]))
     return ', '.join(line)
 
 
@@ -45,7 +53,6 @@ def add_section_params(movement, lines):
 
 def get_ini(params):
     d = get_param_dict(params)
-    print d
     num_movements = len(d)
     lines = [
         "# Composition settings",
