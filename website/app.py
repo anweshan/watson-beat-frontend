@@ -1,7 +1,9 @@
 import os
 import subprocess
+import random
+import string
 
-from flask import Flask, request, render_template, url_for
+from flask import Flask, request, render_template, url_for, send_file
 
 from util import ini
 
@@ -49,10 +51,13 @@ def submit():
                   single_midi_fn="output.mid")
 
     single_midi_fn = "output.mid"
-    output_wav_fn = get_app_dir() + "/static/tmp.wav"
+    #wav_name = "tmp-{}.wav".format(random_string(6)) # avoid caching
+    wav_name = "tmp.wav"
+    output_wav_fn = get_app_dir() + "/static/" + wav_name
     convert_midi_to_wav(single_midi_fn, output_wav_fn)
 
-    return render_template('audio.html') #, wav_fn="tmp.wav")
+    wav_url = url_for('static', filename=wav_name)
+    return render_template('audio.html', wav_url=wav_url)
 
 
 def convert_midi_to_wav(midi_fn, wav_fn):
@@ -100,3 +105,7 @@ def get_app_dir():
 
 def get_wb_src_dir():
     return (get_app_dir()[:-7] + 'watson-beat/src/')
+
+def random_string(N):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits)
+                   for _ in range(N))
