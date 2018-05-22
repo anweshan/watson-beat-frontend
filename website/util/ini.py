@@ -25,7 +25,7 @@ def get_param_dict(params):
 
 
 def add_movement_params(movement, movement_id, lines):
-    lines.append("movement settings")
+    lines.append("#movement settings")
     lines.append("movementId: {}".format(movement_id))
     lines.append("movementDuration: {}".format(movement["movementDuration"]))
     lines.append("")
